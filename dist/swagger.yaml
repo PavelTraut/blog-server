@@ -1,0 +1,249 @@
+openapi: 3.0.0
+info:
+  title: Blog API
+  description: Simple blog api.
+  version: 1.0
+paths:
+  /posts:
+    get:
+      summary: Returns a list of posts.
+      parameters:
+        - in: path
+          name: limit
+          schema:
+            type: integer
+            minimum: 0
+            example: 20
+        - in: path
+          name: page
+          schema:
+            type: integer
+            minimum: 0
+            example: 0
+      responses:
+        '200':
+          description: A JSON array of user names
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    template:
+                      type: string
+                      description: Markdown
+                    _id:
+                      type: string
+                      description: Post id
+                    createdAt:
+                      type: string
+                      description: Post creation date
+    post:
+      summary: Create a post.
+      parameters:
+        - in: header
+          name: authorization
+          description: Bearer token
+          schema:
+            type: string
+      requestBody:
+        description: New post content
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                markdown:
+                  type: string
+      responses:
+        '200':
+          description: Created post
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    template:
+                      type: string
+                      description: Markdown
+                    _id:
+                      type: string
+                      description: Post id
+                    createdAt:
+                      type: string
+                      description: Post creation date
+        '401':
+          description: Bad authorization token
+        '400':
+          description: Not valid request body
+    put:
+      summary: Update a post.
+      parameters:
+        - in: header
+          name: authorization
+          description: Bearer token
+          schema:
+            type: string
+      requestBody:
+        description: Updated description in *Markdown*
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                markdown:
+                  type: string
+                postId:
+                  type: string
+      responses:
+        '200':
+          description: Updated post
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    template:
+                      type: string
+                      description: Markdown
+                    _id:
+                      type: string
+                      description: Post id
+                    createdAt:
+                      type: string
+                      description: Post creation date
+        '401':
+          description: Bad authorization token
+        '400':
+          description: Not valid request body
+    delete:
+      summary: Delete post.
+      parameters:
+        - in: header
+          name: authorization
+          description: Bearer token
+          schema:
+            type: string
+        - in: path
+          name: id
+          description: Post id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Post was delete
+        '401':
+          description: Bad authorization token
+        '400':
+          description: Not valid request body
+  /auth/login:
+    post:
+      summary: Login user.
+      requestBody:
+        description: Auth data
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                login:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Token and user
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    token:
+                      type: string
+                    user:
+                      type: object
+                      properties:
+                        login:
+                          type: string
+                        _id:
+                          type: string
+        '401':
+          description: Bad auth
+        '400':
+          description: Not valid request body
+  /auth/me:
+    post:
+      summary: Get authorization.
+      parameters:
+        - in: header
+          name: authorization
+          description: Bearer token
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Token and user
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    token:
+                      type: string
+                    user:
+                      type: object
+                      properties:
+                        login:
+                          type: string
+                        _id:
+                          type: string
+        '401':
+          description: Bad auth
+  /auth/register:
+    post:
+      summary: Register user.
+      requestBody:
+        description: User data
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                login:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Token and user
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    token:
+                      type: string
+                    user:
+                      type: object
+                      properties:
+                        login:
+                          type: string
+                        _id:
+                          type: string
+        '401':
+          description: Bad auth
